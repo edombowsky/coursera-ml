@@ -18,8 +18,26 @@ grad = zeros(size(theta));
 %               derivatives of the cost w.r.t. each parameter in theta
 
 
+% do not regularise theta0 - theta1 in octave
+J = 1 ./ m * (-y * log(sigmoid(X * theta)) - (1 - y') * log(1 - sigmoid(X * theta(X * theta))) + lambda / 2 ./ m * theta' * theta - theta(1)^2);
+mask = ones(size(theta));
+mask(1) = 0
+grad = ( X' * (sigmoid(X*theta) - y ) )/ m + lambda/m * theta_1;
 
+% Version #2 also works
+% theta_1 = [0; theta(2:end)];
+% J = -1 * sum( y .* log( sigmoid(X*theta) ) + (1 - y ) .* log( (1 - sigmoid(X*theta)) ) ) / m  + lambda/(2*m) * theta_1' * theta_1;
+% grad = ( X' * (sigmoid(X*theta) - y ) )/ m + lambda/m * theta_1;
 
+% Version #3 also works
+% hx = sigmoid(X * theta);
+% m = length(X);
+
+% J = (sum(-y' * log(hx) - (1 - y')*log(1 - hx)) / m) + lambda * sum(theta(2:end).^2) / (2*m);
+
+% % theta = initial_theta
+% % lambda .* [0; ones(length(theta)-1, 1)
+% grad =((hx - y)' * X / m)' + lambda .* theta .* [0; ones(length(theta)-1, 1)] ./ m ;
 
 
 % =============================================================
